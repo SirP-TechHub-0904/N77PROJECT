@@ -1,0 +1,123 @@
+﻿@page
+@model RazorWebUI.Areas.ITrainings.Pages.Admin.UpdateSettingModel
+@{
+}
+
+<div class="card card-default">
+    <div class="card-header">
+        <h3 class="card-title">UPDATE CERTIFICATE SETTING</h3>
+
+    </div>
+    <!-- /.card-header -->
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <form method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Setting.Id" />
+                    <input type="hidden" asp-for="Setting.CertificateLeftSideSignatureKey" />
+                    <input type="hidden" asp-for="Setting.CertificateRightSideSignatureKey" />
+                    <input type="hidden" asp-for="Setting.CertificateLeftSideSignatureUrl" />
+                    <input type="hidden" asp-for="Setting.CertificateRightSideSignatureUrl" />
+                    <div class="form-group">
+                        <label asp-for="Setting.CertificateTitle" class="control-label"></label>
+                        <input asp-for="Setting.CertificateTitle" class="form-control" />
+                        <span asp-validation-for="Setting.CertificateTitle" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            @if (!String.IsNullOrEmpty(Model.Setting.CertificateRightSideSignatureUrl))
+                            {
+                                <div class="form-group">
+                                    <label class="control-label">Left Signature</label><br />
+                                    <img src="@Model.Setting.CertificateRightSideSignatureUrl" style="max-height:200px;" />
+                                </div>
+                            }
+                            <div class="form-group">
+                                <label class="control-label">Upload Left Signature</label><br />
+                                <input type="file" class="control-label" asp-for="SignatureLeft" accept="image/*" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Setting.CertificateUseRightSidePhysicalSignature" class="control-label"></label>
+                                <input asp-for="Setting.CertificateUseRightSidePhysicalSignature" />
+                                <span asp-validation-for="Setting.CertificateUseRightSidePhysicalSignature" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Setting.CertificateRightSideName" class="control-label"></label>
+                                <input asp-for="Setting.CertificateRightSideName" class="form-control" />
+                                <span asp-validation-for="Setting.CertificateRightSideName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Setting.CertificateRightSideOfficePosition" class="control-label"></label>
+                                <input asp-for="Setting.CertificateRightSideOfficePosition" class="form-control" />
+                                <span asp-validation-for="Setting.CertificateRightSideOfficePosition" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Setting.CertificateRightSideOfficeTitle" class="control-label"></label>
+                                <input asp-for="Setting.CertificateRightSideOfficeTitle" class="form-control" />
+                                <span asp-validation-for="Setting.CertificateRightSideOfficeTitle" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            @if (!String.IsNullOrEmpty(Model.Setting.CertificateLeftSideSignatureUrl))
+                            {
+                                <div class="form-group">
+                                    <label class="control-label">Right Signature</label><br />
+                                    <img src="@Model.Setting.CertificateLeftSideSignatureUrl" style="max-height:200px;" />
+                                </div>
+                            }
+                            <div class="form-group">
+                                <label class="control-label">Upload Right Signature</label><br />
+                                <input type="file" class="control-label" asp-for="SignatureRight" accept="image/*" />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Setting.CertificateUseLeftSidePhysicalSignature" class="control-label"></label>
+                                <input asp-for="Setting.CertificateUseLeftSidePhysicalSignature" />
+                                <span asp-validation-for="Setting.CertificateUseLeftSidePhysicalSignature" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Setting.CertificateLeftSideName" class="control-label"></label>
+                                <input asp-for="Setting.CertificateLeftSideName" class="form-control" />
+                                <span asp-validation-for="Setting.CertificateLeftSideName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Setting.CertificateLeftSideOfficePosition" class="control-label"></label>
+                                <input asp-for="Setting.CertificateLeftSideOfficePosition" class="form-control" />
+                                <span asp-validation-for="Setting.CertificateLeftSideOfficePosition" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Setting.CertificateLeftSideOfficeTitle" class="control-label"></label>
+                                <input asp-for="Setting.CertificateLeftSideOfficeTitle" class="form-control" />
+                                <span asp-validation-for="Setting.CertificateLeftSideOfficeTitle" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <input type="submit" value="Add" class="btn btn-primary" />
+                        <a asp-page="./Index" class="btn bg-gradient-warning btn-sm" style="float:right;">Back</a>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <!-- /.row -->
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

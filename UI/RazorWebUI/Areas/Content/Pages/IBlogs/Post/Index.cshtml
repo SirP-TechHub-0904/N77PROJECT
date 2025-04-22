@@ -1,0 +1,167 @@
+﻿@page
+@model RazorWebUI.Areas.Content.Pages.IBlogs.Post.IndexModel
+
+@{
+    ViewData["Title"] = "BLOG ";
+    @if (User.Identity.IsAuthenticated && User.IsInRole("SubAdmin") || User.IsInRole("SuperAdmin"))
+    {
+        Layout = "/Pages/Shared/Admin/_Main.cshtml";
+
+    }
+    else
+    {
+        Layout = "/Pages/Shared/Admin/_User.cshtml";
+
+    }
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">POST/BLOG LIST</h3>
+
+
+        <a asp-page="/IBlogs/Category/Index" class="btn bg-danger btn-sm" style="float:right;margin-left:5px;margin-right:5px;">Blog Category</a>
+        <a asp-page="./Create" class="btn bg-gradient-warning btn-sm" style="float:right;">Add New</a>
+
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <form method="get" class="form-inline" style="margin-bottom:10px;">
+            <div class="input-group">
+                <input type="text"
+                       name="SearchQuery"
+                       value="@Model.SearchQuery"
+                       class="form-control"
+                       placeholder="Search..."
+                       style="max-width: 300px;" />
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table id="" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>S/N</th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Blog[0].Title)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Blog[0].Date)
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+
+                @{
+                    int sn = (Model.PageNumber - 1) * 10;
+                }
+                <tbody>
+                    @foreach (var item in Model.Blog)
+                    {
+                        <tr>
+
+                            <td>
+                                @{
+                                    sn++;
+                                }
+                                @sn
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Date)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.BlogCategory.Title)
+                            </td>
+
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-success">Action</button>
+
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-success dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
+                                        </button>
+                                        <div class="dropdown-menu" style="">
+
+                                            <a class="dropdown-item" asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                                            <a class="dropdown-item" asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <!-- First Page -->
+                @if (Model.PageNumber > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-route-PageNumber="1" asp-route-SearchQuery="@Model.SearchQuery"> First</a>
+                    </li>
+                }
+
+                <!-- Previous Page -->
+                @if (Model.PageNumber > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-route-PageNumber="@(Model.PageNumber - 1)" asp-route-SearchQuery="@Model.SearchQuery"> Previous</a>
+                    </li>
+                }
+
+                <!-- Page Numbers -->
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    if (i == Model.PageNumber || (i <= 2 || i > Model.TotalPages - 2) || Math.Abs(i - Model.PageNumber) <= 1)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a class="page-link" asp-route-PageNumber="@i" asp-route-SearchQuery="@Model.SearchQuery">@i</a>
+                        </li>
+                    }
+                    else if (i == 3 && Model.PageNumber > 4)
+                    {
+                        <li class="page-item"><span class="page-link">...</span></li>
+                    }
+                    else if (i == Model.TotalPages - 3 && Model.PageNumber < Model.TotalPages - 3)
+                    {
+                        <li class="page-item"><span class="page-link">...</span></li>
+                    }
+                }
+
+                <!-- Next Page -->
+                @if (Model.PageNumber < Model.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-route-PageNumber="@(Model.PageNumber + 1)" asp-route-SearchQuery="@Model.SearchQuery">Next </a>
+                    </li>
+                }
+
+                <!-- Last Page -->
+                @if (Model.PageNumber < Model.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-route-PageNumber="@Model.TotalPages" asp-route-SearchQuery="@Model.SearchQuery">Last </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+
+    </div>
+</div>

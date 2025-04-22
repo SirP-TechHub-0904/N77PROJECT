@@ -1,0 +1,35 @@
+﻿@page
+@model RazorWebUI.Areas.ITrainings.Pages.Admin.TrainingUsersAssessmentModel
+@{
+}
+
+
+<form method="post">
+
+
+    <div class="row">
+        <div class="col-sm-6">
+
+
+            <input type="text" name="xty" value="2" />
+            <input type="text" name="tid" value="@Model.TrainingId" />
+            <input type="submit" value="Submit Post" />
+        </div>
+
+    </div>
+</form>
+<br /><br />
+<form method="post">
+
+
+    <div class="row">
+        <div class="col-sm-6">
+
+
+            <input type="text" name="xty" value="0" />
+            <input type="text" name="tid" value="@Model.TrainingId" />
+            <input type="submit" value="Submit Pre" />
+        </div>
+
+    </div>
+</form>

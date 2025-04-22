@@ -1,0 +1,128 @@
+﻿@page
+@model RazorWebUI.Pages.ContactModel
+@{
+    ViewData["Title"] = "CONTACT US";
+
+    ViewData["PageName"] = "CONTACT US";
+    ViewData["Description"] = Model.SuperSetting.CompanyDescription;
+    ViewData["Image"] = Model.SuperSetting.CompanyLogoUrl;
+
+    @if (Model.SuperSetting.TemplateLayoutKey == "Layout1111")
+    {
+        Layout = "/Pages/Shared/Layouts/Theme/RedbizTheme/_RedbizLayout.cshtml";
+    }
+    else if (Model.SuperSetting.TemplateLayoutKey == "Layout2222")
+    {
+        Layout = "/Pages/Shared/Layouts/Theme/Carspot/_CarspotLayout.cshtml";
+    }
+    else if (Model.SuperSetting.TemplateLayoutKey == "Layout3333")
+    {
+        Layout = "/Pages/Shared/Layouts/Theme/Alina/_AlinaLayout.cshtml";
+    }
+    else if (Model.SuperSetting.TemplateLayoutKey == "Layout4444")
+    {
+        Layout = "/Pages/Shared/Layouts/Theme/Archo/_ArchoLayout.cshtml";
+    }
+    else if (Model.SuperSetting.TemplateLayoutKey == "Layout5555")
+    {
+        Layout = "/Pages/Shared/Layouts/Theme/Bizup/_BizupLayout.cshtml";
+    }
+    else if (Model.SuperSetting.TemplateLayoutKey == "Layout6666")
+    {
+        Layout = "/Pages/Shared/Layouts/Theme/Industry/_IndustryLayout.cshtml";
+    }
+    else if (Model.SuperSetting.TemplateLayoutKey == "Layout7777")
+    {
+        Layout = "/Pages/Shared/Layouts/Theme/Lawnella/_LawnellaLayout.cshtml";
+    }
+    else if (Model.SuperSetting.TemplateLayoutKey == "Layout8888")
+    {
+        Layout = "/Pages/Shared/Layouts/Theme/Mistro/_MistroLayout.cshtml";
+    }
+    else if (Model.SuperSetting.TemplateLayoutKey == "Layout9999")
+    {
+        Layout = "/Pages/Shared/Layouts/Theme/Senatory/_SenatoryLayout.cshtml";
+    }
+    else if (Model.SuperSetting.TemplateLayoutKey == "Layout11111111")
+    {
+        Layout = "/Pages/Shared/Layouts/Theme/Education/_EducationLayout.cshtml";
+    }
+    else if (Model.SuperSetting.TemplateLayoutKey == "Layout12121212")
+    {
+        Layout = "/Pages/Shared/Layouts/Theme/Streamlab/_StreamlabLayout.cshtml";
+    }
+}
+@await Component.InvokeAsync("BreadcrumOthers", new { data = "CONTACT US" })
+@if (Model.SuperSetting.TemplateLayoutKey == "Layout8888")
+{
+    <section class="contact pb-lg-0 z-index-1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <div class="contact-main white-bg p-5">
+                        <h2 class="title mb-4">Contact Us</h2>
+                        <form method="post">
+                            <input type="hidden" asp-for="FirstNumber" />
+                            <input type="hidden" asp-for="SecondNumber" />
+                            <div class="form-group">
+                                <input id="form_name" type="text" asp-for="ClientRequest.Name" class="form-control" placeholder="Fullname" required="required" data-error="Fullname is required.">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="form-group">
+                                <input id="form_email" type="email" asp-for="ClientRequest.Email" class="form-control" placeholder="Email" required="required" data-error="Valid email is required.">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="form-group">
+                                <input id="form_phone" type="tel" asp-for="ClientRequest.Phone" class="form-control" placeholder="Phone" required="required" data-error="Phone is required">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="form-group">
+                                <input id="form_phone" type="text" asp-for="ClientRequest.Subject" class="form-control" placeholder="Subject" required="required" data-error="Subject is required">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="form-group">
+                                <textarea id="form_message" asp-for="ClientRequest.Message" class="form-control" placeholder="Message" rows="4" required="required" data-error="Please,leave us a message."></textarea>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="captcha">Please solve the following: @Model.FirstNumber + @Model.SecondNumber = ?</label>
+                                <input type="number" id="captcha" asp-for="Captcha" required="required">
+                            </div>
+
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-primary" value="Submit">
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 form-info mt-4">
+                    <h2 class="title">Get In <span>Touch!</span></h2>
+
+                    <ul class="contact-info list-unstyled mt-4">
+                        <li class="mb-4">
+                            <i class="flaticon-paper-plane"></i><span>Address:</span>
+                            <p>@Model.Setting.AddressOne</p>
+                            <p>@Model.Setting.AddressTwo</p>
+                        </li>
+                        <li class="mb-4">
+                            <i class="flaticon-phone-call"></i><span>Phone:</span>
+                            <a href="Model.Setting.PhoneOne">@Model.Setting.PhoneOne</a>
+                            <a href="@Model.Setting.PhoneTwo">@Model.Setting.PhoneTwo</a>
+                            <a href="@Model.Setting.PhoneThree">@Model.Setting.PhoneThree</a>
+
+                        </li>
+                        <li>
+                            <i class="flaticon-message"></i><span>Email</span>
+                            <a href="mailto:@Model.Setting.EmailOne">@Model.Setting.EmailOne</a>
+                            <a href="mailto:@Model.Setting.EmailTwo">@Model.Setting.EmailTwo</a>
+                            <a href="mailto:@Model.Setting.EmailThree">@Model.Setting.EmailThree</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+}
+ 

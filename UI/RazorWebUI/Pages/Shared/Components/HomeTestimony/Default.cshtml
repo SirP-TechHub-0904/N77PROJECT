@@ -1,0 +1,65 @@
+﻿@model ICollection<Domain.Models.Testimony>
+@using System.Text.RegularExpressions;
+@{
+    Domain.Models.Setting xsetting = ViewBag.sxt;
+    Domain.Models.SuperSetting supersetting = ViewBag.suppersetting;
+    Regex regex = new Regex("[^a-zA-Z0-9]");
+}
+ 
+
+@if (xsetting.AddTestimonyToHome == true)
+{
+
+
+     
+    @if (supersetting.TemplateLayoutKey == "Layout8888")
+    {
+        <section class="main-testimony">
+            <div class="container">
+                <div class="tgm-juray">
+                    <h3>Testimonies</h3>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="owl-carousel" data-items="1" data-autoplay="true">
+                            @foreach (var item in Model)
+                            {
+                                <div class="item">
+                                    <div class="row justify-content-center">
+                                        <div class="col-lg-10">
+                                            <div class="testimonial position-relative">
+                                                <div class="d-md-flex align-items-center">
+                                                    @if (!String.IsNullOrEmpty(item.ImageUrl))
+                                                    {
+                                                        <div class="flex-shrink-0">
+                                                            <div class="testimonial-avatar">
+                                                                <div class="testimonial-img">
+                                                                    <img class="img-fluid" src="@item.ImageUrl" alt="@item.Title">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    <div class="flex-grow-1 ms-md-5 mt-5 mt-md-0">
+                                                        <div class="testimonial-content">
+                                                            <span><i class="fas fa-quote-left"></i></span>
+                                                            <p>@item.Description</p>
+                                                            <div class="testimonial-caption">
+                                                                <h6>@item.Title</h6>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+
+ }

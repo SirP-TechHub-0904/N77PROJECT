@@ -1,0 +1,562 @@
+﻿@model ICollection<Domain.Models.Slider>
+@using System.Text.RegularExpressions;
+@{
+    Domain.Models.Setting xsetting = ViewBag.setting;
+    Domain.Models.SuperSetting supersetting = ViewBag.superx;
+    Regex regex = new Regex("[^a-zA-Z0-9]");
+}
+
+
+@if (supersetting.TemplateLayoutKey == "Layout8888")
+{
+
+     if (supersetting.SliderTemplateKey == "Slider2222")
+    {
+        <header id="site-header" class="header header-3">
+            @if (xsetting.DisableMainTopMenu == false)
+            {
+                <div class="top-bar d-sm-block d-none">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6 col-md-4">
+                                <div class="topbar-link d-md-block d-none">
+                                    <ul class="list-inline">
+                                        @if (xsetting.ShowEmailOneInTop == true)
+                                        {
+                                            <li class="list-inline-item">
+                                                <a href="mailto:@xsetting.EmailOne"><i class="far fa-envelope-open"></i>@xsetting.EmailOne</a>
+                                            </li>
+                                        }
+                                        @if (xsetting.ShowPhoneOneInTop == true)
+                                        {
+                                            <li class="list-inline-item">
+                                                <a href="tel:@xsetting.PhoneOne.Replace(" ", "").Replace(")", "").Replace("(", "").Replace("-", "")"> <i class="fas fa-mobile-alt"></i>@xsetting.PhoneOne</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-4 text-end">
+                                <div class="social-icons social-hover social-colored top-social-list">
+                                    <ul class="list-inline">
+
+                                        <li class="social-facebook"><a href="@xsetting.FacebookPage"><i class="fab fa-facebook"></i></a></li>
+                                        <li class="social-twitter"><a href="@xsetting.TwitterPage"><i class="fab fa-x-twitter"></i></a></li>
+                                        <li class="social-instagram"><a href="@xsetting.InstagramPage"><i class="fab fa-instagram"></i></a></li>
+                                        <li class="social-youtube"><a href="@xsetting.YoutubeChannel"><i class="fab fa-youtube"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+            <div id="header-wrap">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- Navbar -->
+                            <nav class="navbar navbar-expand-lg">
+                                <a class="navbar-brand logo" href="/">
+                                    <img id="logo-img" class="img-fluid" src="@supersetting.CompanyLogoUrl" alt="@supersetting.CompanyName">
+                                </a>
+                                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+                                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                                    <!-- Left nav -->
+                                    <ul class="nav navbar-nav ms-auto">
+                                        @{
+                                            IEnumerable<Domain.Models.PageCategory> catitemlist = ViewBag.pages;
+                                            IEnumerable<Domain.Models.WebPage> singlePages = ViewBag.singlePages;
+                                        }
+                                        @foreach (var item in singlePages.Where(x => x.HomeSortFrom == Domain.Models.EnumStatus.HomeSortFrom.Top))
+                                        {
+                                            if (item.EnableDirectUrl == true)
+                                            {
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="@item.DirectUrl">@item.Title</a>
+
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="nav-item">
+                                                    <a class="nav-link" asp-page="/Source" asp-route-id="@item.Id" asp-route-title="@regex.Replace(item.Title, "-")">@item.Title</a>
+
+                                                </li>
+                                            }
+                                        }
+
+                                        @foreach (var item in catitemlist.Where(x => x.HomeSortFrom == Domain.Models.EnumStatus.HomeSortFrom.Top))
+                                        {
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">@item.Title</a>
+
+                                                @{
+                                                    IEnumerable<Domain.Models.WebPage> itemlistxx = item.WebPages;
+
+
+                                                    IEnumerable<Domain.Models.WebPage> FirstDropDownRaw = item.WebPages.Where(x => x.MainPageId == null);
+                                                    IEnumerable<Domain.Models.WebPage> SecondDropDown = item.WebPages.Where(x => x.MainPageId != null);
+
+                                                    //get id
+                                                    var seconddropDownMainPageId = SecondDropDown.Select(x => x.MainPageId).Distinct();
+                                                    IEnumerable<Domain.Models.WebPage> DropselectedItems = itemlistxx.Where(item => seconddropDownMainPageId.Contains(item.Id));
+
+
+
+                                                    var seconddropDownMainPageIdRemove = SecondDropDown.Select(x => x.Id).Distinct();
+                                                    IEnumerable<Domain.Models.WebPage> itemlistcc = item.WebPages.Where(x => !seconddropDownMainPageIdRemove.Contains(x.Id));
+                                                    IEnumerable<Domain.Models.WebPage> itemlist = itemlistcc.Where(x => !seconddropDownMainPageId.Contains(x.Id));
+
+
+                                                }
+
+                                                <ul class="dropdown-menu">
+
+
+                                                    @foreach (var xitem in DropselectedItems.Where(x => x.Publish == true && x.ShowInMenuDropDown == true).OrderBy(x => x.SortOrder).ToList())
+                                                    {
+
+                                                        <li class="dropdown dropdown-submenu">
+                                                            @if (xitem.EnableDirectUrl == true)
+                                                            {
+                                                                <a target="_blank" href="@xitem.DirectUrl" class="dropdown-toggle" data-bs-toggle="dropdown">
+                                                                    @xitem.Title
+                                                                </a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a asp-page="/Source" asp-route-id="@xitem.Id" asp-route-title="@regex.Replace(xitem.Title, "-")" class="dropdown-toggle" data-bs-toggle="dropdown">
+                                                                    @xitem.Title
+                                                                </a>
+                                                            }
+
+                                                            @{
+                                                                IEnumerable<Domain.Models.WebPage> Dropdowmtwo = item.WebPages.Where(x => x.MainPageId == xitem.Id);
+
+
+                                                            }
+
+                                                            <ul class="dropdown-menu">
+
+                                                                @foreach (var xitemlist in Dropdowmtwo.Where(x => x.Publish == true && x.ShowInMenuDropDown == true).OrderBy(x => x.SortOrder).ToList())
+                                                                {
+                                                                    if (xitemlist.EnableDirectUrl == true)
+                                                                    {
+                                                                        <li>
+                                                                            <a target="_blank" href="@xitemlist.DirectUrl">@xitemlist.Title</a>
+
+                                                                        </li>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <li>
+                                                                            <a asp-page="/Source" asp-route-id="@xitemlist.Id" asp-route-title="@regex.Replace(xitemlist.Title, "-")">@xitemlist.Title</a>
+
+                                                                        </li>
+                                                                    }
+                                                                }
+
+                                                            </ul>
+                                                        </li>
+                                                    }
+                                                    @foreach (var xitem in itemlist.Where(x => x.Publish == true && x.ShowInMenuDropDown == true).OrderBy(x => x.SortOrder).ToList())
+                                                    {
+                                                        if (xitem.EnableDirectUrl == true)
+                                                        {
+                                                            <li>
+                                                                <a target="_blank" href="@xitem.DirectUrl">@xitem.Title</a>
+
+                                                            </li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li>
+                                                                <a asp-page="/Source" asp-route-id="@xitem.Id" asp-route-title="@regex.Replace(xitem.Title, "-")">@xitem.Title</a>
+
+                                                            </li>
+                                                        }
+                                                    }
+                                                </ul>
+                                            </li>
+
+                                        }
+                                        @if (xsetting.ShowProductsInMenu == true)
+                                        {
+                                            <li class="nav-item dropdown">
+                                                @{
+                                                    IEnumerable<Domain.Models.ProductCategory> productpage = ViewBag.productpage;
+                                                }
+                                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" asp-page="/UHSource">@await Component.InvokeAsync("ProductTitle")</a>
+                                                @if (productpage.Count() > 0)
+                                                {
+                                                    <ul class="dropdown-menu">
+                                                        @foreach (var item in productpage)
+                                                        {
+                                                            <li><a asp-page="/UHSource_Info" asp-route-id="@item.Id" asp-route-title="@regex.Replace(item.Title, "-")">@item.Title</a></li>
+                                                        }
+                                                    </ul>
+                                                }
+
+                                            </li>
+                                        }
+
+                                        @foreach (var item in singlePages.Where(x => x.HomeSortFrom == Domain.Models.EnumStatus.HomeSortFrom.Middle))
+                                        {
+                                            if (item.EnableDirectUrl == true)
+                                            {
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="@item.DirectUrl">@item.Title</a>
+
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="nav-item">
+                                                    <a class="nav-link" asp-page="/Source" asp-route-id="@item.Id" asp-route-title="@regex.Replace(item.Title, "-")">@item.Title</a>
+
+                                                </li>
+                                            }
+                                        }
+                                        @foreach (var item in ViewBag.linkExternal)
+                                        {
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="@item.DirectUrl">@item.Title</a>
+
+                                            </li>
+
+                                        }
+
+                                        @if (xsetting.AddBlogToMenu == true)
+                                        {
+                                            if (xsetting.UseCategoryBlog == false)
+                                            {
+                                                <li class="nav-item">
+                                                    <a class="nav-link" asp-page="/Bpg">@xsetting.BlogDisplayTitle</a>
+
+                                                </li>
+
+                                            }
+                                            else
+                                            {
+
+
+                                                <li class="nav-item dropdown">
+                                                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">@xsetting.BlogDisplayTitle</a>
+
+                                                    @{
+                                                        IEnumerable<Domain.Models.BlogCategory> itemlist = ViewBag.blogcategory;
+                                                    }
+                                                    <ul class="dropdown-menu">
+
+                                                        @foreach (var xitem in itemlist.Where(x => x.Publish == true).ToList())
+                                                        {
+
+                                                            <li>
+                                                                <a asp-page="/CatBpg" asp-route-id="@xitem.Id" asp-route-title="@xitem.Title">@xitem.Title</a>
+
+                                                            </li>
+
+                                                        }
+
+                                                    </ul>
+                                                </li>
+                                            }
+                                        }
+                                        @if (supersetting.ActivateProfilePortfolio == true && supersetting.ShowInMenuPortfolio == true)
+                                        {
+                                            <li class="nav-item">
+                                                <a class="nav-link" asp-page="/PortfolioAccount">@supersetting.PortfolioTitle</a>
+
+                                            </li>
+                                        }
+                                        @if (xsetting.ShowContactUsMenu == true)
+                                        {
+                                            <li class="nav-item">
+                                                <a class="nav-link" asp-page="/Contact">Contact Us</a>
+
+                                            </li>
+                                        }
+                                        @if (xsetting.AddCareerToMenu == true)
+                                        {
+                                            <li class="nav-item">
+                                                <a class="nav-link" asp-page="/Career">@xsetting.CareerDisplayTitle</a>
+                                            </li>
+                                        }
+                                        @if (supersetting.ActivateLoginInMenu == true)
+                                        {
+                                            <li class="nav-item"><a class="nav-link" asp-page="/Account/Login" asp-area="Identity">Login</a></li>
+                                        }
+                                        @foreach (var item in catitemlist.Where(x => x.HomeSortFrom == Domain.Models.EnumStatus.HomeSortFrom.Middle))
+                                        {
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">@item.Title</a>
+
+                                                @{
+                                                    IEnumerable<Domain.Models.WebPage> itemlistxx = item.WebPages;
+
+
+                                                    IEnumerable<Domain.Models.WebPage> FirstDropDownRaw = item.WebPages.Where(x => x.MainPageId == null);
+                                                    IEnumerable<Domain.Models.WebPage> SecondDropDown = item.WebPages.Where(x => x.MainPageId != null);
+
+                                                    //get id
+                                                    var seconddropDownMainPageId = SecondDropDown.Select(x => x.MainPageId).Distinct();
+                                                    IEnumerable<Domain.Models.WebPage> DropselectedItems = itemlistxx.Where(item => seconddropDownMainPageId.Contains(item.Id));
+
+
+
+                                                    var seconddropDownMainPageIdRemove = SecondDropDown.Select(x => x.Id).Distinct();
+                                                    IEnumerable<Domain.Models.WebPage> itemlistcc = item.WebPages.Where(x => !seconddropDownMainPageIdRemove.Contains(x.Id));
+                                                    IEnumerable<Domain.Models.WebPage> itemlist = itemlistcc.Where(x => !seconddropDownMainPageId.Contains(x.Id));
+
+
+                                                }
+
+                                                <ul class="dropdown-menu">
+
+
+                                                    @foreach (var xitem in DropselectedItems.Where(x => x.Publish == true && x.ShowInMenuDropDown == true).OrderBy(x => x.SortOrder).ToList())
+                                                    {
+
+                                                        <li class="dropdown dropdown-submenu">
+                                                            @if (xitem.EnableDirectUrl == true)
+                                                            {
+                                                                <a target="_blank" href="@xitem.DirectUrl" class="dropdown-toggle" data-bs-toggle="dropdown">
+                                                                    @xitem.Title
+                                                                </a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a asp-page="/Source" asp-route-id="@xitem.Id" asp-route-title="@regex.Replace(xitem.Title, "-")" class="dropdown-toggle" data-bs-toggle="dropdown">
+                                                                    @xitem.Title
+                                                                </a>
+                                                            }
+
+                                                            @{
+                                                                IEnumerable<Domain.Models.WebPage> Dropdowmtwo = item.WebPages.Where(x => x.MainPageId == xitem.Id);
+
+
+                                                            }
+
+                                                            <ul class="dropdown-menu">
+
+                                                                @foreach (var xitemlist in Dropdowmtwo.Where(x => x.Publish == true && x.ShowInMenuDropDown == true).OrderBy(x => x.SortOrder).ToList())
+                                                                {
+                                                                    if (xitemlist.EnableDirectUrl == true)
+                                                                    {
+                                                                        <li>
+                                                                            <a target="_blank" href="@xitemlist.DirectUrl">@xitemlist.Title</a>
+
+                                                                        </li>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <li>
+                                                                            <a asp-page="/Source" asp-route-id="@xitemlist.Id" asp-route-title="@regex.Replace(xitemlist.Title, "-")">@xitemlist.Title</a>
+
+                                                                        </li>
+                                                                    }
+                                                                }
+
+                                                            </ul>
+                                                        </li>
+                                                    }
+                                                    @foreach (var xitem in itemlist.Where(x => x.Publish == true && x.ShowInMenuDropDown == true).OrderBy(x => x.SortOrder).ToList())
+                                                    {
+                                                        if (xitem.EnableDirectUrl == true)
+                                                        {
+                                                            <li>
+                                                                <a target="_blank" href="@xitem.DirectUrl">@xitem.Title</a>
+
+                                                            </li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li>
+                                                                <a asp-page="/Source" asp-route-id="@xitem.Id" asp-route-title="@regex.Replace(xitem.Title, "-")">@xitem.Title</a>
+
+                                                            </li>
+                                                        }
+                                                    }
+                                                </ul>
+                                            </li>
+
+                                        }
+
+                                        @foreach (var item in singlePages.Where(x => x.HomeSortFrom == Domain.Models.EnumStatus.HomeSortFrom.Bottom))
+                                        {
+                                            if (item.EnableDirectUrl == true)
+                                            {
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="@item.DirectUrl">@item.Title</a>
+
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="nav-item">
+                                                    <a class="nav-link" asp-page="/Source" asp-route-id="@item.Id" asp-route-title="@regex.Replace(item.Title, "-")">@item.Title</a>
+
+                                                </li>
+                                            }
+                                        }
+                                        @foreach (var item in catitemlist.Where(x => x.HomeSortFrom == Domain.Models.EnumStatus.HomeSortFrom.Bottom))
+                                        {
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">@item.Title</a>
+
+                                                @{
+                                                    IEnumerable<Domain.Models.WebPage> itemlistxx = item.WebPages;
+
+
+                                                    IEnumerable<Domain.Models.WebPage> FirstDropDownRaw = item.WebPages.Where(x => x.MainPageId == null);
+                                                    IEnumerable<Domain.Models.WebPage> SecondDropDown = item.WebPages.Where(x => x.MainPageId != null);
+
+                                                    //get id
+                                                    var seconddropDownMainPageId = SecondDropDown.Select(x => x.MainPageId).Distinct();
+                                                    IEnumerable<Domain.Models.WebPage> DropselectedItems = itemlistxx.Where(item => seconddropDownMainPageId.Contains(item.Id));
+
+
+
+                                                    var seconddropDownMainPageIdRemove = SecondDropDown.Select(x => x.Id).Distinct();
+                                                    IEnumerable<Domain.Models.WebPage> itemlistcc = item.WebPages.Where(x => !seconddropDownMainPageIdRemove.Contains(x.Id));
+                                                    IEnumerable<Domain.Models.WebPage> itemlist = itemlistcc.Where(x => !seconddropDownMainPageId.Contains(x.Id));
+
+
+                                                }
+
+                                                <ul class="dropdown-menu">
+
+
+                                                    @foreach (var xitem in DropselectedItems.Where(x => x.Publish == true && x.ShowInMenuDropDown == true).OrderBy(x => x.SortOrder).ToList())
+                                                    {
+
+                                                        <li class="dropdown dropdown-submenu">
+                                                            @if (xitem.EnableDirectUrl == true)
+                                                            {
+                                                                <a target="_blank" href="@xitem.DirectUrl" class="dropdown-toggle" data-bs-toggle="dropdown">
+                                                                    @xitem.Title
+                                                                </a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a asp-page="/Source" asp-route-id="@xitem.Id" asp-route-title="@regex.Replace(xitem.Title, "-")" class="dropdown-toggle" data-bs-toggle="dropdown">
+                                                                    @xitem.Title
+                                                                </a>
+                                                            }
+
+                                                            @{
+                                                                IEnumerable<Domain.Models.WebPage> Dropdowmtwo = item.WebPages.Where(x => x.MainPageId == xitem.Id);
+
+
+                                                            }
+
+                                                            <ul class="dropdown-menu">
+
+                                                                @foreach (var xitemlist in Dropdowmtwo.Where(x => x.Publish == true && x.ShowInMenuDropDown == true).OrderBy(x => x.SortOrder).ToList())
+                                                                {
+                                                                    if (xitemlist.EnableDirectUrl == true)
+                                                                    {
+                                                                        <li>
+                                                                            <a target="_blank" href="@xitemlist.DirectUrl">@xitemlist.Title</a>
+
+                                                                        </li>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <li>
+                                                                            <a asp-page="/Source" asp-route-id="@xitemlist.Id" asp-route-title="@regex.Replace(xitemlist.Title, "-")">@xitemlist.Title</a>
+
+                                                                        </li>
+                                                                    }
+                                                                }
+
+                                                            </ul>
+                                                        </li>
+                                                    }
+                                                    @foreach (var xitem in itemlist.Where(x => x.Publish == true && x.ShowInMenuDropDown == true).OrderBy(x => x.SortOrder).ToList())
+                                                    {
+                                                        if (xitem.EnableDirectUrl == true)
+                                                        {
+                                                            <li>
+                                                                <a target="_blank" href="@xitem.DirectUrl">@xitem.Title</a>
+
+                                                            </li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li>
+                                                                <a asp-page="/Source" asp-route-id="@xitem.Id" asp-route-title="@regex.Replace(xitem.Title, "-")">@xitem.Title</a>
+
+                                                            </li>
+                                                        }
+                                                    }
+                                                </ul>
+                                            </li>
+
+                                        }
+
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!--header end-->
+
+
+        <!--hero section start-->
+
+        <section class="banner p-0 position-relative fullscreen-banner">
+            <div class="banner-slider owl-carousel no-pb" data-dots="false" data-nav="true">
+                @foreach (var item in Model)
+                {
+                    <div class="item" data-bg-img="@item.Url" data-overlay="6">
+                        <div class="align-center">
+                            <div class="container">
+                                <div class="row text-center">
+                                    <div class="col-lg-10 col-md-12 mx-auto">
+                                        <h5 class="text-white mb-3 letter-space-3 animated6">@Html.Raw(item.MiniTitle)</h5>
+                                        <h1 class="text-white mb-3 animated8">@Html.Raw(item.Title)</h1>
+                                        <p class="lead text-white animated5 mb-3">
+                                            @Html.Raw(item.Text)
+                                        </p>
+
+                                        @if (item.ButtonLink == "0")
+                                        {
+                                            <a href="#" class="btn btn-theme btn-radius animated7">@Html.Raw(item.ButtonText)</a>
+                                        }
+                                        else if (item.ButtonLink == "000")
+                                        {
+                                            <a asp-page="/Contact" class="btn btn-theme btn-radius animated7">@Html.Raw(item.ButtonText)</a>
+                                        }
+                                        else if (item.ButtonLink != "0" && item.ButtonLink == "000")
+                                        {
+                                            <a asp-page="/Source" asp-route-id="@item.ButtonLink" class="btn btn-theme btn-radius animated7">@Html.Raw(item.ButtonText)</a>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </section>
+
+    }
+   
+}
+ 
+@if (xsetting.EnableBreakingNewsRibon == true && xsetting.RibonPosition == Domain.Models.EnumStatus.RibonPosition.AfterSlider)
+{
+    @await Component.InvokeAsync("NewsRibon")
+}
