@@ -163,7 +163,7 @@ namespace RazorWebUI.Areas.Content.Pages.ISliders
                 await _context.SaveChangesAsync(); TempData["success"] = "Successful";
 
                 // Remove the outdated cache
-                _memoryCache.Remove("SliderViewComponentData");
+                _memoryCache.Remove("SliderViewComponentData123");
             }
             catch (DbUpdateConcurrencyException)
             {

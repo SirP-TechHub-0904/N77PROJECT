@@ -172,7 +172,7 @@ namespace RazorWebUI.Areas.Content.Pages.IBlogs.Post
                     throw;
                 }
             }
-            _memoryCache.Remove("SliderViewComponentData");
+            _memoryCache.Remove("SliderViewComponentData123");
 
             return RedirectToPage("./Index");
         }

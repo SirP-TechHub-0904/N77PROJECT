@@ -145,7 +145,7 @@ namespace RazorWebUI.Areas.Content.Pages.IBlogs.Post
 
             _context.Blogs.Add(Blog);
             await _context.SaveChangesAsync(); TempData["success"] = "Successful"; TempData["success"] = "Successful";
-            _memoryCache.Remove("SliderViewComponentData");
+            _memoryCache.Remove("SliderViewComponentData123");
 
             return RedirectToPage("./Index");
         }
