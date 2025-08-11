@@ -42,7 +42,7 @@ namespace RazorWebUI.Pages
                 return RedirectToPage("/AuthVadmin/Readonly", new { area = "V2" });
             }
              
-            SuperSetting = SuperSetting;
+            SuperSetting = superSetting;
              
 
             Random random = new Random();

@@ -28,10 +28,10 @@ namespace RazorWebUI.Pages
                
                 return RedirectToPage("/AuthVadmin/Readonly", new {area="V2"});
             }
-           
-            
+            SuperSetting = superSetting;
+
             Templatechoose = SuperSetting.TemplateLayoutKey;
-            SuperSetting =SuperSetting;
+            
             Blogs = await _context.Blogs.Where(x => x.Publish == true).OrderByDescending(x => x.Date).ToListAsync();
             Setting = await _context.Settings.FirstOrDefaultAsync();
              return Page();

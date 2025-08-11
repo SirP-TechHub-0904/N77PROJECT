@@ -1,0 +1,65 @@
+﻿@page
+@model RazorWebUI.Areas.User.Pages.UserGroupPage.GroupListsModel
+@{
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">@Model.UserCategory.Title</h3>
+    </div>
+     
+    
+</div>
+
+ 
+ 
+
+<div class="card">
+    
+      <div class="card-body table-responsive">
+        <table id="example1" class="table table-bordered table-striped">
+
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>ColumnOne</th>
+                    <th>ColumnTwo</th>
+                    <th>ColumnThree</th>
+                    <th>ColumnFour</th>
+                </tr>
+            </thead>
+            @{
+                int sn = 0;
+            }
+            <tbody>
+                @foreach (var item in Model.UserList)
+                {
+                    <tr>
+
+                        <td>
+                            @{
+                                sn++;
+                            }
+                            @sn
+                        </td>
+                        <td>@item.User.FullnameX</td>
+                        <td>@item.User.Email</td>
+                        <td>@item.User.PhoneNumber</td>
+                        <td>@item.ColumnOne</td>
+                        <td>@item.ColumnTwo</td>
+                        <td>@item.ColumnThree</td>
+                        <td>@item.ColumnFour</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+     
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
