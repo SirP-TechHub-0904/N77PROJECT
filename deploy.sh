@@ -39,13 +39,19 @@ fi
 # Make binary executable
 chmod +x "$APP_DIR/$APP_EXEC" 2>/dev/null || true
 
-# 4. Handle .env: Preserve existing production configuration
-if [ "$PRESERVED_ENV" = true ]; then
+# 4. Handle .env: Prefer GitHub Secret if provided, otherwise preserve existing
+if [ -n "$DOTENV_SECRET" ]; then
+  echo ">>> Applying .env configuration from GitHub Secret..."
+  echo "$DOTENV_SECRET" > "$APP_DIR/.env"
+elif [ "$PRESERVED_ENV" = true ]; then
   echo ">>> Restoring preserved production .env file..."
   cp /tmp/n77_existing.env "$APP_DIR/.env"
   rm -f /tmp/n77_existing.env
 elif [ -f "$APP_DIR/.env" ]; then
   echo ">>> .env is present in $APP_DIR."
+elif [ -f "$APP_DIR/.env.example" ]; then
+  echo ">>> First deploy: Initializing .env from template..."
+  cp "$APP_DIR/.env.example" "$APP_DIR/.env"
 fi
 
 if [ -f "$APP_DIR/.env" ]; then
@@ -156,14 +162,15 @@ fi
 # 8. Local Health Check
 echo ">>> Performing local health check on http://127.0.0.1:$PORT..."
 HEALTHY=false
-for i in 1 2 3 4 5; do
-  HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:$PORT/" || echo "000")
+sleep 4
+for i in 1 2 3 4 5 6; do
+  HTTP_CODE=$(curl -s --connect-timeout 5 --max-time 15 -o /dev/null -w "%{http_code}" "http://127.0.0.1:$PORT/" || echo "000")
   echo ">>> Health check attempt $i: HTTP Status $HTTP_CODE"
   if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "302" ]; then
     HEALTHY=true
     break
   fi
-  sleep 2
+  sleep 3
 done
 
 if [ "$HEALTHY" = true ]; then

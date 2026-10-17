@@ -52,20 +52,21 @@ jobs:
           USER: ${{ secrets.HOSTINGER_SSH_USER }}
           KEY: ${{ secrets.HOSTINGER_SSH_KEY }}
           PORT: ${{ secrets.HOSTINGER_SSH_PORT }}
+          DOTENV_SECRET: ${{ secrets.DOTENV }}
         run: |
           # Setup SSH Directory
           mkdir -p ~/.ssh
           echo "$KEY" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-          # SSH Options
-          SSH_OPTS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=30"
+          # SSH Options with KeepAlive to prevent broken pipe during cold start
+          SSH_OPTS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=30 -o ServerAliveInterval=15 -o ServerAliveCountMax=10 -o TCPKeepAlive=yes"
 
           echo ">>> Transferring package to Hostinger VPS ($HOST)..."
           scp $SSH_OPTS -P $PORT app-package.tar.gz $USER@$HOST:/tmp/app-package.tar.gz
 
           echo ">>> Executing deployment script on Hostinger..."
-          ssh $SSH_OPTS -p $PORT $USER@$HOST "bash -s" < deploy.sh
+          ssh $SSH_OPTS -p $PORT $USER@$HOST "DOTENV_SECRET=\"$DOTENV_SECRET\" bash -s" < deploy.sh
 
           # Fetch assigned port
           ASSIGNED_PORT=$(ssh $SSH_OPTS -p $PORT $USER@$HOST "cat /var/www/n77/.port 2>/dev/null || echo '5011'")
