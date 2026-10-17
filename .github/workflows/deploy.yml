@@ -68,7 +68,7 @@ jobs:
           ssh $SSH_OPTS -p $PORT $USER@$HOST "bash -s" < deploy.sh
 
           # Fetch assigned port
-          ASSIGNED_PORT=$(ssh $SSH_OPTS -p $PORT $USER@$HOST "cat /var/www/n77/.port 2>/dev/null || echo '5010'")
+          ASSIGNED_PORT=$(ssh $SSH_OPTS -p $PORT $USER@$HOST "cat /var/www/n77/.port 2>/dev/null || echo '5011'")
 
           echo "=================================================="
           echo ">>> N77Project Successfully Deployed to Hostinger VPS!"

@@ -78,8 +78,8 @@ if [ -f "$APP_DIR/.port" ] && [ -s "$APP_DIR/.port" ]; then
 fi
 
 if [ -z "$PORT" ]; then
-  echo ">>> Detecting next available port (starting from 5010)..."
-  CHECK_PORT=5010
+  echo ">>> Detecting next available port (starting from 5011)..."
+  CHECK_PORT=5011
   while [ $CHECK_PORT -le 5200 ]; do
     if ! ss -tuln 2>/dev/null | grep -q ":$CHECK_PORT " && ! netstat -tuln 2>/dev/null | grep -q ":$CHECK_PORT "; then
       PORT=$CHECK_PORT
@@ -90,8 +90,8 @@ if [ -z "$PORT" ]; then
 fi
 
 if [ -z "$PORT" ]; then
-  echo ">>> Warning: Could not scan port cleanly, falling back to port 5010"
-  PORT=5010
+  echo ">>> Warning: Could not scan port cleanly, falling back to port 5011"
+  PORT=5011
 fi
 
 echo "$PORT" > "$APP_DIR/.port"
