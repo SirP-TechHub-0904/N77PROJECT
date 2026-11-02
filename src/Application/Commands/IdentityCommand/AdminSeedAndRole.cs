@@ -1,4 +1,4 @@
-﻿using Application.Services;
+using Application.Services;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -100,7 +100,7 @@ namespace BackendApplication.Application.Commands.IdentityCommands
                 PlaceOfWork = "",
             };
 
-            var result = await _userManager.CreateAsync(user, "[REDACTED_BOOTSTRAP_PASSWORD]");
+            var result = await _userManager.CreateAsync(user, (System.Environment.GetEnvironmentVariable("ADMIN_SEED_PASSWORD") ?? ""));
             if (result.Succeeded)
             {
                  
